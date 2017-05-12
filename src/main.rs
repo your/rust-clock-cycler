@@ -5,11 +5,11 @@ use std::thread::sleep;
 
 /// CONFIG BEGIN
 
-// Values lower than 1000 would lead to potential losses of cycles in scope.
-static MILLISECONDS_CLOCK: u64     = 900;
+// Values higher than 60 would lead to potential losses of cycles in scope.
+static SECONDS_CLOCK: u64 = 20;
 
 // How often to match time scope?
-static MINUTES_FREQUENCY: i32      = 15;
+static MINUTES_FREQUENCY: i32 = 15;
 // Valid hours to run the check for.
 static HOURS_RANGE: &'static [i32] = &[9, 10, 11, 12, 14, 15, 16, 17];
 
@@ -52,7 +52,7 @@ fn in_scope(hour: i32, minute: i32) -> bool {
 }
 
 fn sleep_loop() {
-    sleep(Duration::from_millis(MILLISECONDS_CLOCK));
+    sleep(Duration::new(SECONDS_CLOCK, 0));
 }
 
 fn time_unit_to_integer(time: time::Tm, unit: &'static str) -> i32 {
