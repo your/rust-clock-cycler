@@ -44,15 +44,11 @@ fn do_something() {
 }
 
 fn in_scope(hour: i32, minute: i32) -> bool {
-    if !HOURS_RANGE.contains(&hour) {
-        return false;
+    if HOURS_RANGE.contains(&hour) && (minute % MINUTES_FREQUENCY == 0) {
+        return true;
     }
 
-    if !(minute % MINUTES_FREQUENCY == 0) {
-        return false;
-    }
-
-    return true;
+    return false;
 }
 
 fn sleep_loop() {
