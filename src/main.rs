@@ -15,9 +15,6 @@ static HOURS_RANGE: &'static [i32] = &[9, 10, 11, 12, 14, 15, 16, 17];
 
 /// CONFIG END
 
-static IDENTIFIER_HOUR: &'static str = "hour";
-static IDENTIFIER_MIN:  &'static str = "min";
-
 fn main() {
     loop {
         check_time();
@@ -28,12 +25,12 @@ fn main() {
 fn check_time() {
     let now = time::now();
 
-    let hour   = time_unit_to_integer(now, IDENTIFIER_HOUR);
-    let minute = time_unit_to_integer(now, IDENTIFIER_MIN);
+    let hour   = now.tm_hour;
+    let minute = now.tm_min;
 
     if in_scope(hour, minute) {
         println!("Time to run, it's {}:{}!", hour, minute);
-        ::do_something();
+        do_something();
     } else {
         println!("Nothing to do yet, cycling again.");
     }
@@ -44,23 +41,9 @@ fn do_something() {
 }
 
 fn in_scope(hour: i32, minute: i32) -> bool {
-    if HOURS_RANGE.contains(&hour) && (minute % MINUTES_FREQUENCY == 0) {
-        return true;
-    }
-
-    return false;
+    HOURS_RANGE.contains(&hour) && (minute % MINUTES_FREQUENCY == 0)
 }
 
 fn sleep_loop() {
     sleep(Duration::new(SECONDS_CLOCK, 0));
-}
-
-fn time_unit_to_integer(time: time::Tm, unit: &'static str) -> i32 {
-    let format = match unit as &'static str {
-        "hour" => "%H",
-        "min" => "%M",
-        _ => "" // panic!
-    };
-
-    return time::strftime(format, &time).unwrap().parse::<i32>().unwrap();
 }
